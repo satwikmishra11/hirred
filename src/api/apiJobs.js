@@ -5,8 +5,9 @@ export async function getJobs(token, { location, company_id, searchQuery }) {
   const supabase = await supabaseClient(token);
   let query = supabase
     .from("jobs")
-    .select("*, saved: saved_jobs(id), company: companies(name,logo_url)");
-
+    .select("*, saved: saved_jobs(id), company: companies(name,logo_url)")
+    .eq("isOpen", true); // Only show open jobs to candidates
+  
   if (location) {
     query = query.eq("location", location);
   }
