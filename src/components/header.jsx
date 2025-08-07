@@ -37,6 +37,13 @@ const Header = () => {
         </Link>
 
         <div className="flex gap-8">
+          <a
+            href="https://mockstar.om-mishra.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button variant="outline">Career Counselling</Button>
+          </a>
           <SignedOut>
             <Button variant="outline" onClick={() => setShowSignIn(true)}>
               Login
