@@ -31,6 +31,8 @@ export async function analyzeResumeWithAI(resumeText) {
     return text;
   } catch (error) {
     console.error("Error analyzing resume with AI:", error);
-    throw new Error("Failed to analyze resume. Please try again later.");
+    throw new Error(
+      "Failed to analyze resume. This could be due to an invalid API key or an issue with the AI service. Please try again later."
+    );
   }
 }
