@@ -36,7 +36,7 @@ const Header = () => {
           <img src="/logo.png" className="h-20" alt="Hirrd Logo" />
         </Link>
 
-        <div className="flex gap-8">
+        <div className="flex gap-4 items-center">
           <a
             href="https://mockstar.om-mishra.com/"
             target="_blank"
