@@ -37,6 +37,9 @@ const Header = () => {
         </Link>
 
         <div className="flex gap-4 items-center">
+          <Link to="/resume-analyzer">
+            <Button variant="outline">Resume Analyzer</Button>
+          </Link>
           <a
             href="https://mockstar.om-mishra.com/"
             target="_blank"
