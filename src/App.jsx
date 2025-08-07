@@ -11,6 +11,7 @@ import JobListing from "./pages/jobListing";
 import MyJobs from "./pages/my-jobs";
 import SavedJobs from "./pages/saved-jobs";
 import JobPage from "./pages/job";
+import ResumeAnalyzer from "./pages/resume-analyzer"; // Import the new page
 
 import "./App.css";
 
@@ -67,6 +68,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <JobPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/resume-analyzer",
+        element: (
+          <ProtectedRoute>
+            <ResumeAnalyzer />
           </ProtectedRoute>
         ),
       },
