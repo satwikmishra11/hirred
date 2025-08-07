@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { analyzeResumeWithAI } from "@/api/apiAI";
 import { BarLoader } from "react-spinners";
 import MDEditor from "@uiw/react-md-editor";
-import pdfParse from "pdf-parse";
 
 const ResumeAnalyzer = () => {
   const [resumeText, setResumeText] = useState("");
@@ -17,18 +16,10 @@ const ResumeAnalyzer = () => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = async (e) => {
-        try {
-          const typedArray = new Uint8Array(e.target.result);
-          const pdf = await pdfParse(typedArray);
-          setResumeText(pdf.text);
-        } catch (error) {
-          setError(
-            "Failed to parse PDF. Please ensure it's a valid PDF file and try again."
-          );
-        }
+      reader.onload = (e) => {
+        setResumeText(e.target.result);
       };
-      reader.readAsArrayBuffer(file);
+      reader.readAsText(file);
     }
   };
 
@@ -56,9 +47,9 @@ const ResumeAnalyzer = () => {
             htmlFor="resume-upload"
             className="block text-lg font-medium mb-2"
           >
-            Upload your resume (PDF)
+            Upload your resume (text or PDF)
           </label>
-          <Input id="resume-upload" type="file" onChange={handleFileChange} accept=".pdf" />
+          <Input id="resume-upload" type="file" onChange={handleFileChange} />
         </div>
         <div>
           <label
