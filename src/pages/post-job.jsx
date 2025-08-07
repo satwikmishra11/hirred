@@ -2,7 +2,6 @@ import { getCompanies } from "@/api/apiCompanies";
 import { addNewJob } from "@/api/apiJobs";
 import AddCompanyDrawer from "@/components/add-company-drawer";
 import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -62,8 +61,11 @@ const PostJob = () => {
   };
 
   useEffect(() => {
-    if (dataCreateJob?.length > 0) navigate("/jobs");
-  }, [loadingCreateJob]);
+  if (dataCreateJob?.length > 0) {
+    navigate("/jobs");
+  }
+}, [dataCreateJob, loadingCreateJob, navigate]);
+
 
   const {
     loading: loadingCompanies,
@@ -134,13 +136,13 @@ const PostJob = () => {
                     {field.value
                       ? companies?.find((com) => com.id === Number(field.value))
                           ?.name
-                      : "Company"}
+                      : "Select or Add a Company"}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     {companies?.map(({ name, id }) => (
-                      <SelectItem key={name} value={id}>
+                      <SelectItem key={id} value={id}>
                         {name}
                       </SelectItem>
                     ))}
@@ -167,9 +169,6 @@ const PostJob = () => {
         />
         {errors.requirements && (
           <p className="text-red-500">{errors.requirements.message}</p>
-        )}
-        {errors.errorCreateJob && (
-          <p className="text-red-500">{errors?.errorCreateJob?.message}</p>
         )}
         {errorCreateJob?.message && (
           <p className="text-red-500">{errorCreateJob?.message}</p>
