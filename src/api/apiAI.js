@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // IMPORTANT: Replace with your actual API key
-const API_KEY = "AIzaSyB_Qup-5lxAEMcYwoXKmzioFKzgMoob9cY";
+const API_KEY = "YOUR_API_KEY";
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
@@ -31,8 +31,6 @@ export async function analyzeResumeWithAI(resumeText) {
     return text;
   } catch (error) {
     console.error("Error analyzing resume with AI:", error);
-    throw new Error(
-      "Failed to analyze resume. This could be due to an invalid API key or an issue with the AI service. Please try again later."
-    );
+    throw new Error("Failed to analyze resume. Please try again later.");
   }
 }
