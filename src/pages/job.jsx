@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BarLoader } from "react-spinners";
 import MDEditor from "@uiw/react-md-editor";
 import { useParams } from "react-router-dom";
@@ -30,6 +30,10 @@ const JobPage = () => {
     job_id: id,
   });
 
+  useEffect(() => {
+  if (isLoaded) fnJob();
+}, [isLoaded, fnJob]); 
+
   const { loading: loadingHiringStatus, fn: fnHiringStatus } = useFetch(
     updateHiringStatus,
     {
@@ -37,27 +41,9 @@ const JobPage = () => {
     }
   );
 
-  // Track current hiring status
-  const [status, setStatus] = useState(job?.isOpen ? "open" : "closed");
-
-  useEffect(() => {
-    if (isLoaded) {
-      fnJob();
-    }
-  }, [isLoaded, fnJob]);
-
-  useEffect(() => {
-    // Sync status when job data changes
-    if (job) {
-      setStatus(job?.isOpen ? "open" : "closed");
-    }
-  }, [job]);
-
-  const handleStatusChange = async (value) => {
+  const handleStatusChange = (value) => {
     const isOpen = value === "open";
-    await fnHiringStatus(isOpen);
-    setStatus(isOpen ? "open" : "closed");
-    fnJob(); // Refetch the job details after status change
+    fnHiringStatus(isOpen).then(() => fnJob());
   };
 
   if (!isLoaded || loadingJob) {
@@ -73,7 +59,7 @@ const JobPage = () => {
         <img src={job?.company?.logo_url} className="h-12" alt={job?.title} />
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between ">
         <div className="flex gap-2">
           <MapPinIcon /> {job?.location}
         </div>
@@ -81,7 +67,7 @@ const JobPage = () => {
           <Briefcase /> {job?.applications?.length} Applicants
         </div>
         <div className="flex gap-2">
-          {status === "open" ? (
+          {job?.isOpen ? (
             <>
               <DoorOpen /> Open
             </>
@@ -94,12 +80,14 @@ const JobPage = () => {
       </div>
 
       {job?.recruiter_id === user?.id && (
-        <Select value={status} onValueChange={handleStatusChange}>
+        <Select onValueChange={handleStatusChange}>
           <SelectTrigger
-            className={`w-full ${status === "open" ? "bg-green-950" : "bg-red-950"}`}
+            className={`w-full ${job?.isOpen ? "bg-green-950" : "bg-red-950"}`}
           >
             <SelectValue
-              placeholder={`Hiring Status ${status === "open" ? "( Open )" : "( Closed )"}`}
+              placeholder={
+                "Hiring Status " + (job?.isOpen ? "( Open )" : "( Closed )")
+              }
             />
           </SelectTrigger>
           <SelectContent>
@@ -112,12 +100,13 @@ const JobPage = () => {
       <h2 className="text-2xl sm:text-3xl font-bold">About the job</h2>
       <p className="sm:text-lg">{job?.description}</p>
 
-      <h2 className="text-2xl sm:text-3xl font-bold">What we are looking for</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold">
+        What we are looking for
+      </h2>
       <MDEditor.Markdown
         source={job?.requirements}
         className="bg-transparent sm:text-lg" // add global ul styles - tutorial
       />
-
       {job?.recruiter_id !== user?.id && (
         <ApplyJobDrawer
           job={job}
@@ -126,15 +115,15 @@ const JobPage = () => {
           applied={job?.applications?.find((ap) => ap.candidate_id === user.id)}
         />
       )}
-
       {loadingHiringStatus && <BarLoader width={"100%"} color="#36d7b7" />}
-
       {job?.applications?.length > 0 && job?.recruiter_id === user?.id && (
         <div className="flex flex-col gap-2">
           <h2 className="font-bold mb-4 text-xl ml-1">Applications</h2>
-          {job?.applications.map((application) => (
-            <ApplicationCard key={application.id} application={application} />
-          ))}
+          {job?.applications.map((application) => {
+            return (
+              <ApplicationCard key={application.id} application={application} />
+            );
+          })}
         </div>
       )}
     </div>
