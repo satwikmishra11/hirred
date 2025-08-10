@@ -55,6 +55,7 @@ const PostJob = () => {
   const onSubmit = (data) => {
     fnCreateJob({
       ...data,
+      company_id: Number(data.company_id), // Convert company_id to a number
       recruiter_id: user.id,
       isOpen: true,
     });
@@ -141,7 +142,7 @@ const PostJob = () => {
                 <SelectContent>
                   <SelectGroup>
                     {companies?.map(({ name, id }) => (
-                      <SelectItem key={id} value={id}>
+                      <SelectItem key={id} value={String(id)}>
                         {name}
                       </SelectItem>
                     ))}
