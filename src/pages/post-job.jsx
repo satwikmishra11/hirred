@@ -52,13 +52,16 @@ const PostJob = () => {
     fn: fnCreateJob,
   } = useFetch(addNewJob);
 
-  const onSubmit = (data) => {
-    fnCreateJob({
-      ...data,
-      company_id: Number(data.company_id), // Convert company_id to a number
-      recruiter_id: user.id,
-      isOpen: true,
-    });
+   const onSubmit = (data) => {
+    fnCreateJob(
+      {}, // placeholder for unused second param
+      {
+        ...data,
+        company_id: Number(data.company_id),
+        recruiter_id: user.id,
+        isOpen: true,
+      }
+    );
   };
 
   useEffect(() => {
